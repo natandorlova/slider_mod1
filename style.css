@@ -202,10 +202,18 @@ h1{
 
     inset:0;
 
-    z-index:15;
+    z-index:25;
+
+    pointer-events:none;
 
 }
 
+
+.marker{
+
+    pointer-events:auto;
+
+}
 .marker{
 
     position:absolute;
@@ -218,11 +226,11 @@ h1{
 
     cursor:pointer;
 
-    transform-origin:left center;
+    transition:opacity .2s;
 
-    animation:marker .25s ease;
+    pointer-events:auto;
 
-    transition:.2s;
+    animation:marker .3s ease;
 
 }
 
@@ -238,11 +246,15 @@ h1{
 
         transform:scaleX(0);
 
+        opacity:0;
+
     }
 
     to{
 
         transform:scaleX(1);
+
+        opacity:.35;
 
     }
 
