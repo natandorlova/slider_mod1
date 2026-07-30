@@ -1,151 +1,147 @@
 const viewer = document.getElementById("viewer");
-
 const reveal = document.getElementById("reveal");
-
 const handle = document.getElementById("handle");
-
 const divider = document.getElementById("divider");
-
 const markersLayer = document.getElementById("markers");
 
 const card = document.getElementById("infoCard");
-
 const closeCard = document.getElementById("closeCard");
 
 
-let isDragging = false;
-
-let currentPosition = 50;
-
+let dragging = false;
+let currentPosition = 0;
 
 
-function setPosition(x){
 
+// --------------------------
+// движение слайдера
+// --------------------------
+
+function moveSlider(clientX) {
 
     const rect = viewer.getBoundingClientRect();
 
-
-    let position = x - rect.left;
-
-
-    if(position < 0){
-        position = 0;
-    }
+    let x = clientX - rect.left;
 
 
-    if(position > rect.width){
-        position = rect.width;
-    }
+    if (x < 0) x = 0;
+
+    if (x > rect.width) x = rect.width;
 
 
-    currentPosition = (position / rect.width) * 100;
+    currentPosition = (x / rect.width) * 100;
 
 
-    // открываем заполненный слой
+    // открываем заполненный документ
 
     reveal.style.clipPath =
-        `inset(0 ${100-currentPosition}% 0 0)`;
+        `inset(0 ${100 - currentPosition}% 0 0)`;
 
 
-    // двигаем линию
+    // линия
 
     divider.style.left =
         currentPosition + "%";
 
 
-    // двигаем ручку
+    // ручка
 
     handle.style.left =
         currentPosition + "%";
 
 
-    checkMarkers();
+    updateMarkers();
 
 }
 
 
 
-
-// начало движения
+// --------------------------
+// старт движения
+// --------------------------
 
 handle.addEventListener(
 "mousedown",
-()=>{
+function(e){
 
-    isDragging = true;
+    dragging = true;
+
+    e.preventDefault();
 
 });
 
 
 handle.addEventListener(
 "touchstart",
-(e)=>{
+function(e){
 
-    isDragging = true;
+    dragging = true;
 
     e.preventDefault();
 
 },
 {passive:false}
-
 );
 
 
 
 
-// движение мыши
+// --------------------------
+// движение мышью
+// --------------------------
 
 window.addEventListener(
 "mousemove",
-(e)=>{
+function(e){
 
-    if(!isDragging) return;
+    if(!dragging) return;
 
-    setPosition(e.clientX);
+    moveSlider(e.clientX);
 
 });
 
 
 
 
-// движение пальца
+// --------------------------
+// движение пальцем
+// --------------------------
 
 window.addEventListener(
 "touchmove",
-(e)=>{
+function(e){
 
-    if(!isDragging) return;
+    if(!dragging) return;
 
-
-    setPosition(
+    moveSlider(
         e.touches[0].clientX
     );
 
-
 },
 {passive:false}
-
 );
 
 
 
 
-// конец движения
+// --------------------------
+// отпускание
+// --------------------------
 
 window.addEventListener(
 "mouseup",
-()=>{
+function(){
 
-    isDragging=false;
+    dragging=false;
 
 });
 
 
 window.addEventListener(
 "touchend",
-()=>{
+function(){
 
-    isDragging=false;
+    dragging=false;
 
 });
 
@@ -153,39 +149,38 @@ window.addEventListener(
 
 
 
-// ------------------------------
-// МАРКЕРЫ
-// ------------------------------
+// --------------------------
+// подсветки
+// --------------------------
 
-
-function checkMarkers(){
-
+function updateMarkers(){
 
     fields.forEach(field=>{
 
 
-        const existing =
+        let marker =
         document.getElementById(
-            "marker-"+field.id
+            "marker-" + field.id
         );
 
 
         if(currentPosition >= field.showAt){
 
 
-            if(!existing){
+            if(!marker){
 
                 createMarker(field);
 
             }
 
 
-        }else{
+        }
+        else{
 
 
-            if(existing){
+            if(marker){
 
-                existing.remove();
+                marker.remove();
 
             }
 
@@ -194,7 +189,6 @@ function checkMarkers(){
 
 
     });
-
 
 }
 
@@ -212,35 +206,34 @@ function createMarker(field){
 
 
     marker.id =
-    "marker-"+field.id;
+    "marker-" + field.id;
 
 
 
     marker.style.left =
-    field.x+"%";
+    field.x + "%";
 
 
     marker.style.top =
-    field.y+"%";
+    field.y + "%";
 
 
     marker.style.width =
-    field.w+"%";
+    field.w + "%";
 
 
     marker.style.height =
-    field.h+"%";
+    field.h + "%";
 
 
 
     marker.addEventListener(
     "click",
-    (event)=>{
+    function(e){
 
-        // важно:
-        // клик не передает управление слайдеру
+        // чтобы клик не двигал слайдер
 
-        event.stopPropagation();
+        e.stopPropagation();
 
 
         showCard(field);
@@ -251,11 +244,15 @@ function createMarker(field){
 
     markersLayer.appendChild(marker);
 
-
 }
 
 
 
+
+
+// --------------------------
+// карточка
+// --------------------------
 
 function showCard(field){
 
@@ -275,10 +272,9 @@ function showCard(field){
 
 
 
-
 closeCard.addEventListener(
 "click",
-()=>{
+function(){
 
     card.style.display="none";
 
@@ -287,10 +283,29 @@ closeCard.addEventListener(
 
 
 
+// --------------------------
+// старт
+// --------------------------
 
-// стартовое положение
+window.addEventListener(
+"load",
+function(){
 
-setPosition(
-viewer.getBoundingClientRect().left +
-viewer.getBoundingClientRect().width/2
-);
+
+    currentPosition = 0;
+
+
+    reveal.style.clipPath =
+        "inset(0 100% 0 0)";
+
+
+    divider.style.left = "0%";
+
+
+    handle.style.left = "0%";
+
+
+    updateMarkers();
+
+
+});
