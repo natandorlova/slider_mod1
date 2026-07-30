@@ -3,73 +3,98 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Commercial Invoice Trainer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="style.css">
+    <title>Commercial Invoice</title>
+
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
-
 <body>
 
+<div class="page">
 
-<div class="container">
+    <h1>Commercial Invoice</h1>
 
-<h1>Оформление Commercial Invoice</h1>
+    <p class="subtitle">
+        Передвигайте ползунок, чтобы увидеть правильное оформление документа
+    </p>
 
-<p class="intro">
-Передвигайте ползунок и изучайте заполнение документа
-</p>
+    <div class="workspace">
 
+        <!-- ДОКУМЕНТ -->
 
-<div class="invoice" id="invoice">
+        <div class="viewer" id="viewer">
 
+            <!-- Пустой документ -->
 
-<img src="images/blank.png" class="base">
+            <img
+                    src="blank.png"
+                    class="doc blank"
+                    draggable="false">
 
+            <!-- Заполненный документ -->
 
-<div class="filled">
+            <div class="reveal" id="reveal">
 
-<img src="images/completed.png">
+                <img
+                        src="completed.png"
+                        class="doc completed"
+                        draggable="false">
+
+            </div>
+
+            <!-- Зеленые подсветки -->
+
+            <div id="markers"></div>
+
+            <!-- Вертикальная линия -->
+
+            <div id="divider"></div>
+
+            <!-- Ползунок -->
+
+            <div id="handle">
+
+                <div class="handle-circle">
+
+                    ⇆
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Правая карточка -->
+
+        <aside id="infoCard">
+
+            <button id="closeCard">✕</button>
+
+            <h2>
+
+                Выберите поле
+
+            </h2>
+
+            <p>
+
+                Передвигайте ползунок или нажмите на подсвеченную область.
+
+            </p>
+
+        </aside>
+
+    </div>
 
 </div>
-
-
-<div id="markers"></div>
-
-
-<div class="slider">
-<div class="slider-button">⇆</div>
-</div>
-
-
-<div class="popup" id="popup">
-
-<h3></h3>
-
-<p class="main-text"></p>
-
-<div class="mistake">
-
-<b>Обратите внимание:</b>
-
-<span></span>
-
-</div>
-
-</div>
-
-
-</div>
-
-
-</div>
-
 
 <script src="data.js"></script>
+
 <script src="script.js"></script>
 
 </body>
