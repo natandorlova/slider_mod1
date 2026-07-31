@@ -1,24 +1,28 @@
-const viewer = document.getElementById("viewer");
-const overlay = document.getElementById("overlay");
-const handle = document.getElementById("handle");
-const markers = document.getElementById("markers");
+const documentBox = document.getElementById("document");
+const completedLayer = document.getElementById("completedLayer");
+const sliderHandle = document.getElementById("sliderHandle");
+const markersBox = document.getElementById("markers");
+const infoPanel = document.getElementById("infoPanel");
+const infoContent = document.getElementById("infoContent");
 
-const content = document.getElementById("content");
 
 let dragging = false;
 
 let progress = 0;
 
-let activeCard = null;
+
+// какие карточки пользователь закрыл вручную
+let closedCards = [];
 
 
-// --------------------------
-// создаем все подсветки сразу
-// --------------------------
+// ----------------------------
+// создаём зоны подсветки
+// ----------------------------
 
 function createMarkers(){
 
     fields.forEach(field=>{
+
 
         const marker = document.createElement("div");
 
@@ -29,20 +33,23 @@ function createMarkers(){
 
         marker.style.left = field.x + "%";
         marker.style.top = field.y + "%";
+
         marker.style.width = field.w + "%";
         marker.style.height = field.h + "%";
 
 
-        marker.addEventListener("click", function(e){
+
+        marker.onclick = function(e){
 
             e.stopPropagation();
 
             showCard(field);
 
-        });
+        };
 
 
-        markers.appendChild(marker);
+        markersBox.appendChild(marker);
+
 
     });
 
@@ -50,26 +57,31 @@ function createMarkers(){
 
 
 
-// --------------------------
-// движение ползунка
-// --------------------------
+// ----------------------------
+// движение слайдера
+// ----------------------------
 
 function setProgress(value){
 
 
-    progress = Math.max(0,Math.min(100,value));
+    progress = Math.max(
+        0,
+        Math.min(100,value)
+    );
 
 
-    // открываем заполненный документ снизу вверх
 
-    overlay.style.clipPath =
-        `inset(${100-progress}% 0 0 0)`;
+    // открываем заполненный слой сверху вниз
+
+    completedLayer.style.clipPath =
+    `inset(0 0 ${100-progress}% 0)`;
 
 
-    // положение ручки
 
-    handle.style.bottom =
-        progress + "%";
+    // двигаем ручку
+
+    sliderHandle.style.top =
+    progress + "%";
 
 
 
@@ -80,30 +92,32 @@ function setProgress(value){
 
 
 
-function getProgress(clientY){
+function getProgress(y){
+
 
     const rect =
-        viewer.getBoundingClientRect();
+    documentBox.getBoundingClientRect();
 
 
-    let value =
-        ((rect.bottom - clientY) / rect.height) * 100;
-
-
-    return value;
+    return (
+        (y - rect.top)
+        /
+        rect.height
+        *
+        100
+    );
 
 }
 
 
 
-
-// --------------------------
+// ----------------------------
 // мышь
-// --------------------------
+// ----------------------------
 
-handle.addEventListener(
+sliderHandle.addEventListener(
 "mousedown",
-(e)=>{
+function(e){
 
     dragging=true;
 
@@ -112,10 +126,9 @@ handle.addEventListener(
 });
 
 
-
 window.addEventListener(
 "mousemove",
-(e)=>{
+function(e){
 
     if(!dragging) return;
 
@@ -127,10 +140,9 @@ window.addEventListener(
 });
 
 
-
 window.addEventListener(
 "mouseup",
-()=>{
+function(){
 
     dragging=false;
 
@@ -139,14 +151,13 @@ window.addEventListener(
 
 
 
-
-// --------------------------
+// ----------------------------
 // телефон
-// --------------------------
+// ----------------------------
 
-handle.addEventListener(
+sliderHandle.addEventListener(
 "touchstart",
-(e)=>{
+function(e){
 
     dragging=true;
 
@@ -161,7 +172,7 @@ handle.addEventListener(
 
 window.addEventListener(
 "touchmove",
-(e)=>{
+function(e){
 
     if(!dragging) return;
 
@@ -182,7 +193,7 @@ window.addEventListener(
 
 window.addEventListener(
 "touchend",
-()=>{
+function(){
 
     dragging=false;
 
@@ -191,9 +202,9 @@ window.addEventListener(
 
 
 
-// --------------------------
-// поля
-// --------------------------
+// ----------------------------
+// проверяем поля
+// ----------------------------
 
 function updateFields(){
 
@@ -202,38 +213,49 @@ function updateFields(){
 
 
         const marker =
-            document.getElementById(
-                "marker-" + field.id
-            );
+        document.getElementById(
+            "marker-" + field.id
+        );
+
 
 
         if(progress >= field.showAt){
 
 
-            marker.classList.add("visible");
+            marker.classList.add("active");
 
 
-            // автоматическое открытие
 
-            if(activeCard !== field.id){
+            // автоматическое окно,
+            // если пользователь его еще не закрывал
+
+            if(!closedCards.includes(field.id)){
+
 
                 showCard(field);
+
 
             }
 
 
         }
+
         else{
 
 
-            marker.classList.remove("visible");
+            marker.classList.remove("active");
 
 
-            if(activeCard === field.id){
+            removeCard(field.id);
 
-                closeCard();
 
-            }
+            // если вернулись назад,
+            // разрешаем появиться снова
+
+            closedCards =
+            closedCards.filter(
+                id=>id!==field.id
+            );
 
 
         }
@@ -241,56 +263,67 @@ function updateFields(){
 
     });
 
+
 }
 
 
 
 
 
-// --------------------------
-// карточка
-// --------------------------
+// ----------------------------
+// карточки
+// ----------------------------
 
 function showCard(field){
 
 
-    activeCard = field.id;
+    if(
+        document.getElementById(
+            "card-" + field.id
+        )
+    ){
+        return;
+    }
 
 
-    content.innerHTML = `
+
+    const card =
+    document.createElement("div");
+
+
+    card.className="info-card";
+
+    card.id="card-" + field.id;
+
+
+
+    card.innerHTML = `
 
         <h3>${field.title}</h3>
 
         <p>${field.description}</p>
 
-        <button id="closeBtn">
+        <button class="close-button">
             Закрыть
         </button>
 
     `;
 
 
-    document
-    .getElementById("closeBtn")
-    .onclick = function(e){
 
-        e.stopPropagation();
+    card.querySelector("button")
+    .onclick=function(){
 
-        closeCard();
+        closedCards.push(field.id);
+
+        removeCard(field.id);
 
     };
 
-}
 
 
+    infoContent.appendChild(card);
 
-function closeCard(){
-
-    activeCard=null;
-
-
-    content.innerHTML =
-    "Продолжайте двигать ползунок, чтобы изучать документ.";
 
 }
 
@@ -298,9 +331,28 @@ function closeCard(){
 
 
 
-// --------------------------
+function removeCard(id){
+
+
+    const card =
+    document.getElementById(
+        "card-" + id
+    );
+
+
+    if(card){
+
+        card.remove();
+
+    }
+
+}
+
+
+
+// ----------------------------
 // запуск
-// --------------------------
+// ----------------------------
 
 window.onload=function(){
 
