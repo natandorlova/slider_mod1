@@ -4,93 +4,146 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Commercial Invoice</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Invoice Trainer</title>
 
 <link rel="stylesheet" href="style.css">
 
 </head>
 
+
 <body>
+
 
 <div class="page">
 
-    <h1>Commercial Invoice</h1>
 
-    <p class="subtitle">
-        Передвигайте ползунок и изучайте обязательные элементы инвойса
-    </p>
+<h1>
+Разбор коммерческого инвойса
+</h1>
 
-    <div class="layout">
 
-        <div class="viewer" id="viewer">
+<p class="subtitle">
+Передвигайте ползунок сверху вниз и изучайте обязательные элементы документа
+</p>
 
-            <!-- нижний слой -->
+
+
+<div class="layout">
+
+
+
+    <!-- ДОКУМЕНТ -->
+
+    <div class="document-wrapper">
+
+
+        <div class="document" id="document">
+
+
+            <!-- пустой бланк -->
 
             <img
-                class="image"
-                src="images/blank.png"
-                alt="Blank invoice"
-                draggable="false">
+            src="images/blank.png"
+            class="invoice-image"
+            alt="Пустой инвойс">
 
-            <!-- верхний слой -->
+
+
+            <!-- заполненный документ -->
 
             <div
-                class="overlay"
-                id="overlay">
+            class="completed-layer"
+            id="completedLayer">
+
 
                 <img
-                    class="image"
-                    src="images/completed.png"
-                    alt="Completed invoice"
-                    draggable="false">
+                src="images/completed.png"
+                class="invoice-image"
+                alt="Заполненный инвойс">
+
 
             </div>
 
-            <!-- подсветки -->
+
+
+            <!-- зоны подсветки -->
 
             <div id="markers"></div>
 
-            <!-- линия -->
 
-           <!-- вертикальный ползунок -->
 
-<div id="sliderTrack">
-
-    <div id="handle">
-
-        <div class="knob">
-            ↕
         </div>
 
-    </div>
 
-</div>
 
-        <!-- карточка -->
+        <!-- вертикальный слайдер -->
 
-        <aside id="panel">
+        <div class="slider-track" id="sliderTrack">
 
-            <h2>
 
-                Обязательные реквизиты
+            <div class="slider-handle" id="sliderHandle">
 
-            </h2>
 
-            <div id="content">
+                <div class="handle-circle">
+                    ↓
+                </div>
 
-                Передвигайте ползунок
+
             </div>
 
-        </aside>
+
+        </div>
+
+
 
     </div>
 
+
+
+
+
+    <!-- КАРТОЧКА -->
+
+    <aside class="info-panel" id="infoPanel">
+
+
+        <div id="infoContent">
+
+
+            <h2>
+            Интерактивный инвойс
+            </h2>
+
+
+            <p>
+            Передвигайте ползунок вниз, чтобы открыть обязательные элементы документа.
+            </p>
+
+
+        </div>
+
+
+
+    </aside>
+
+
+
 </div>
 
+
+
+</div>
+
+
+
 <script src="data.js"></script>
+
 <script src="script.js"></script>
 
+
 </body>
+
 </html>
