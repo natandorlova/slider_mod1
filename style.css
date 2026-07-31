@@ -306,7 +306,7 @@ to{
 
 .info-panel{
 
-    width:330px;
+    width:360px;
 
     min-height:260px;
 
@@ -314,10 +314,60 @@ to{
 
     border-radius:14px;
 
-    padding:25px;
+    padding:20px;
 
     box-shadow:
     0 12px 30px rgba(0,0,0,.15);
+
+}
+
+
+.info-card{
+
+    background:#fff;
+
+    border-radius:10px;
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+    border-left:4px solid #2563eb;
+
+}
+
+
+.info-card h3{
+
+    color:#2563eb;
+
+    margin-bottom:8px;
+
+}
+
+
+.info-card p{
+
+    line-height:1.5;
+
+}
+
+
+.close-button{
+
+    margin-top:12px;
+
+    padding:6px 14px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#2563eb;
+
+    color:white;
+
+    cursor:pointer;
 
 }
 
