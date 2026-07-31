@@ -28,6 +28,8 @@ function createMarkers(){
 
         marker.className = "marker";
 
+        marker.innerHTML = field.number;
+
         marker.id = "marker-" + field.id;
 
 
@@ -303,7 +305,7 @@ function showCard(field){
 
     card.innerHTML = `
 
-        <h3>${field.title}</h3>
+        <h3>${field.number}${field.title}</h3>
 
         <p>${field.description}</p>
 
