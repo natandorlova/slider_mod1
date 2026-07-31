@@ -11,9 +11,10 @@ body{
 
     background:#eef2f7;
 
-    color:#2f3542;
+    color:#263238;
 
 }
+
 
 
 .page{
@@ -25,6 +26,7 @@ body{
 }
 
 
+
 h1{
 
     text-align:center;
@@ -32,6 +34,7 @@ h1{
     margin-bottom:10px;
 
 }
+
 
 
 .subtitle{
@@ -46,41 +49,64 @@ h1{
 
 
 
-/* общий блок */
+
+/* =========================
+   ОБЩАЯ СХЕМА
+========================= */
+
 
 .layout{
 
     display:flex;
 
-    align-items:flex-start;
+    gap:30px;
 
-    gap:25px;
+    align-items:flex-start;
 
 }
 
 
 
-/* документ */
-
-.viewer{
+.document-wrapper{
 
     position:relative;
 
-    width:min(900px,70vw);
+    display:flex;
 
-    background:white;
+    align-items:center;
 
-    border-radius:12px;
-
-    overflow:hidden;
-
-    box-shadow:0 15px 40px rgba(0,0,0,.18);
+    gap:20px;
 
 }
 
 
 
-.image{
+
+/* =========================
+   ДОКУМЕНТ
+========================= */
+
+
+.document{
+
+    position:relative;
+
+    width:min(850px,70vw);
+
+    background:white;
+
+    box-shadow:
+    0 15px 40px rgba(0,0,0,.18);
+
+    overflow:hidden;
+
+    border-radius:10px;
+
+}
+
+
+
+.invoice-image{
 
     width:100%;
 
@@ -88,17 +114,18 @@ h1{
 
     display:block;
 
-    pointer-events:none;
-
     user-select:none;
+
+    pointer-events:none;
 
 }
 
 
 
-/* заполненный документ */
+/* заполненный слой */
 
-.overlay{
+
+.completed-layer{
 
     position:absolute;
 
@@ -106,13 +133,18 @@ h1{
 
     overflow:hidden;
 
-    clip-path:inset(100% 0 0 0);
+    clip-path:inset(0 0 100% 0);
 
 }
 
 
 
-/* подсветки */
+
+
+/* =========================
+   ПОДСВЕТКИ
+========================= */
+
 
 #markers{
 
@@ -134,83 +166,83 @@ h1{
 
     background:rgba(120,255,90,.45);
 
+    border:2px solid rgba(60,180,60,.35);
+
     border-radius:8px;
 
-    border:1px solid rgba(40,150,40,.25);
+    opacity:0;
 
     pointer-events:auto;
 
     cursor:pointer;
 
-    opacity:0;
-
-    transition:.3s;
+    transition:.35s ease;
 
 }
 
 
-.marker.visible{
+
+.marker.active{
 
     opacity:1;
 
-    animation:appear .35s ease;
+    animation:markerAppear .35s ease;
 
 }
 
 
 
-@keyframes appear{
-
-    from{
-
-        transform:scale(.9);
-
-        opacity:0;
-
-    }
+@keyframes markerAppear{
 
 
-    to{
+from{
 
-        transform:scale(1);
+    transform:scale(.95);
 
-        opacity:1;
+    opacity:0;
 
-    }
+}
+
+
+to{
+
+    transform:scale(1);
+
+    opacity:1;
+
+}
+
 
 }
 
 
 
-/* вертикальный слайдер */
 
-#sliderTrack{
 
-    position:absolute;
+/* =========================
+   ВЕРТИКАЛЬНЫЙ СЛАЙДЕР
+========================= */
 
-    right:18px;
 
-    top:20px;
+.slider-track{
 
-    bottom:20px;
+    position:relative;
 
-    width:40px;
+    width:30px;
 
-    background:rgba(255,255,255,.7);
+    height:90%;
+
+    min-height:500px;
+
+    background:#d9e2ec;
 
     border-radius:20px;
 
-    z-index:50;
-
-    cursor:pointer;
-
-    box-shadow:0 3px 12px rgba(0,0,0,.15);
-
 }
 
 
 
-#handle{
+.slider-handle{
 
     position:absolute;
 
@@ -218,7 +250,7 @@ h1{
 
     transform:translateX(-50%);
 
-    bottom:0;
+    top:0;
 
     width:40px;
 
@@ -226,19 +258,21 @@ h1{
 
     cursor:pointer;
 
+    z-index:50;
+
 }
 
 
 
-.knob{
+.handle-circle{
 
-    width:56px;
+    width:55px;
 
-    height:56px;
+    height:55px;
 
     margin-left:-8px;
 
-    margin-top:-8px;
+    margin-top:-5px;
 
     border-radius:50%;
 
@@ -248,47 +282,68 @@ h1{
 
     display:flex;
 
-    justify-content:center;
-
     align-items:center;
 
-    font-size:25px;
+    justify-content:center;
 
-    box-shadow:0 8px 18px rgba(0,0,0,.25);
+    font-size:24px;
+
+    font-weight:bold;
+
+    box-shadow:
+    0 8px 20px rgba(0,0,0,.25);
 
 }
 
 
 
-/* карточка */
 
-#panel{
 
-    width:340px;
+/* =========================
+   КАРТОЧКА
+========================= */
 
-    min-height:250px;
+
+.info-panel{
+
+    width:330px;
+
+    min-height:260px;
 
     background:white;
 
     border-radius:14px;
 
-    padding:24px;
+    padding:25px;
 
-    box-shadow:0 12px 30px rgba(0,0,0,.15);
+    box-shadow:
+    0 12px 30px rgba(0,0,0,.15);
 
 }
 
 
-#panel h2{
+
+.info-panel h2{
 
     color:#2563eb;
 
-    margin-bottom:20px;
+    margin-bottom:15px;
 
 }
 
 
-#content{
+
+.info-panel h3{
+
+    color:#2563eb;
+
+    margin-bottom:12px;
+
+}
+
+
+
+.info-panel p{
 
     line-height:1.55;
 
@@ -296,9 +351,33 @@ h1{
 
 
 
-/* мобильная версия */
+.close-button{
 
-@media(max-width:1000px){
+    margin-top:20px;
+
+    padding:8px 18px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#2563eb;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+
+
+
+
+/* адаптация */
+
+
+@media(max-width:1100px){
+
 
 .layout{
 
@@ -307,17 +386,18 @@ h1{
 }
 
 
-.viewer{
+.document{
 
     width:100%;
 
 }
 
 
-#panel{
+.info-panel{
 
     width:100%;
 
 }
+
 
 }
