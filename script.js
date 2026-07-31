@@ -1,149 +1,48 @@
 const viewer = document.getElementById("viewer");
 const overlay = document.getElementById("overlay");
-const divider = document.getElementById("divider");
 const handle = document.getElementById("handle");
 const markers = document.getElementById("markers");
-const panel = document.getElementById("content");
+
+const content = document.getElementById("content");
 
 let dragging = false;
-let percent = 0;
 
-// ---------------------
-// установка положения
-// ---------------------
+let progress = 0;
 
-function setSlider(p){
-
-    percent = Math.max(0,Math.min(100,p));
-
-    overlay.style.clipPath =
-        `inset(0 ${100-percent}% 0 0)`;
-
-    divider.style.left = percent+"%";
-
-    handle.style.left = percent+"%";
-
-    updateMarkers();
-
-}
+let activeCard = null;
 
 
-// ---------------------
-// перевод координаты
-// ---------------------
+// --------------------------
+// создаем все подсветки сразу
+// --------------------------
 
-function clientToPercent(clientX){
-
-    const r = viewer.getBoundingClientRect();
-
-    return ((clientX-r.left)/r.width)*100;
-
-}
-
-
-
-// ---------------------
-// мышь
-// ---------------------
-
-handle.addEventListener("mousedown",(e)=>{
-
-    dragging=true;
-
-    e.preventDefault();
-
-});
-
-window.addEventListener("mouseup",()=>{
-
-    dragging=false;
-
-});
-
-window.addEventListener("mousemove",(e)=>{
-
-    if(!dragging) return;
-
-    setSlider(
-        clientToPercent(e.clientX)
-    );
-
-});
-
-
-
-// ---------------------
-// touch
-// ---------------------
-
-handle.addEventListener("touchstart",(e)=>{
-
-    dragging=true;
-
-    e.preventDefault();
-
-},{passive:false});
-
-window.addEventListener("touchend",()=>{
-
-    dragging=false;
-
-});
-
-window.addEventListener("touchmove",(e)=>{
-
-    if(!dragging) return;
-
-    setSlider(
-
-        clientToPercent(
-
-            e.touches[0].clientX
-
-        )
-
-    );
-
-},{passive:false});
-
-
-
-// ---------------------
-// подсветки
-// ---------------------
-
-function updateMarkers(){
-
-    markers.innerHTML="";
+function createMarkers(){
 
     fields.forEach(field=>{
 
-        if(percent>=field.showAt){
+        const marker = document.createElement("div");
 
-            const m=document.createElement("div");
+        marker.className = "marker";
 
-            m.className="marker";
+        marker.id = "marker-" + field.id;
 
-            m.style.left=field.x+"%";
 
-            m.style.top=field.y+"%";
+        marker.style.left = field.x + "%";
+        marker.style.top = field.y + "%";
+        marker.style.width = field.w + "%";
+        marker.style.height = field.h + "%";
 
-            m.style.width=field.w+"%";
 
-            m.style.height=field.h+"%";
+        marker.addEventListener("click", function(e){
 
-            m.onclick=(e)=>{
+            e.stopPropagation();
 
-                e.stopPropagation();
+            showCard(field);
 
-                panel.innerHTML=
-                    "<h3>"+field.title+"</h3><p>"+field.description+"</p>";
+        });
 
-            };
 
-            markers.appendChild(m);
-
-        }
+        markers.appendChild(marker);
 
     });
 
@@ -151,12 +50,262 @@ function updateMarkers(){
 
 
 
-// ---------------------
-// старт
-// ---------------------
+// --------------------------
+// движение ползунка
+// --------------------------
 
-window.onload=()=>{
+function setProgress(value){
 
-    setSlider(0);
+
+    progress = Math.max(0,Math.min(100,value));
+
+
+    // открываем заполненный документ снизу вверх
+
+    overlay.style.clipPath =
+        `inset(${100-progress}% 0 0 0)`;
+
+
+    // положение ручки
+
+    handle.style.bottom =
+        progress + "%";
+
+
+
+    updateFields();
+
+}
+
+
+
+
+function getProgress(clientY){
+
+    const rect =
+        viewer.getBoundingClientRect();
+
+
+    let value =
+        ((rect.bottom - clientY) / rect.height) * 100;
+
+
+    return value;
+
+}
+
+
+
+
+// --------------------------
+// мышь
+// --------------------------
+
+handle.addEventListener(
+"mousedown",
+(e)=>{
+
+    dragging=true;
+
+    e.preventDefault();
+
+});
+
+
+
+window.addEventListener(
+"mousemove",
+(e)=>{
+
+    if(!dragging) return;
+
+
+    setProgress(
+        getProgress(e.clientY)
+    );
+
+});
+
+
+
+window.addEventListener(
+"mouseup",
+()=>{
+
+    dragging=false;
+
+});
+
+
+
+
+
+// --------------------------
+// телефон
+// --------------------------
+
+handle.addEventListener(
+"touchstart",
+(e)=>{
+
+    dragging=true;
+
+    e.preventDefault();
+
+},
+{passive:false}
+
+);
+
+
+
+window.addEventListener(
+"touchmove",
+(e)=>{
+
+    if(!dragging) return;
+
+
+    setProgress(
+        getProgress(
+            e.touches[0].clientY
+        )
+    );
+
+
+},
+{passive:false}
+
+);
+
+
+
+window.addEventListener(
+"touchend",
+()=>{
+
+    dragging=false;
+
+});
+
+
+
+
+// --------------------------
+// поля
+// --------------------------
+
+function updateFields(){
+
+
+    fields.forEach(field=>{
+
+
+        const marker =
+            document.getElementById(
+                "marker-" + field.id
+            );
+
+
+        if(progress >= field.showAt){
+
+
+            marker.classList.add("visible");
+
+
+            // автоматическое открытие
+
+            if(activeCard !== field.id){
+
+                showCard(field);
+
+            }
+
+
+        }
+        else{
+
+
+            marker.classList.remove("visible");
+
+
+            if(activeCard === field.id){
+
+                closeCard();
+
+            }
+
+
+        }
+
+
+    });
+
+}
+
+
+
+
+
+// --------------------------
+// карточка
+// --------------------------
+
+function showCard(field){
+
+
+    activeCard = field.id;
+
+
+    content.innerHTML = `
+
+        <h3>${field.title}</h3>
+
+        <p>${field.description}</p>
+
+        <button id="closeBtn">
+            Закрыть
+        </button>
+
+    `;
+
+
+    document
+    .getElementById("closeBtn")
+    .onclick = function(e){
+
+        e.stopPropagation();
+
+        closeCard();
+
+    };
+
+}
+
+
+
+function closeCard(){
+
+    activeCard=null;
+
+
+    content.innerHTML =
+    "Продолжайте двигать ползунок, чтобы изучать документ.";
+
+}
+
+
+
+
+
+// --------------------------
+// запуск
+// --------------------------
+
+window.onload=function(){
+
+    createMarkers();
+
+    setProgress(0);
 
 };
