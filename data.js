@@ -3,7 +3,7 @@ const fields = [
 {
     id: "seller",
 
-    number: "1.",
+    number: "1. ",
     
     title: "Данные продавца",
 
@@ -22,7 +22,7 @@ const fields = [
 {
     id: "invoice",
 
-    number: "2.",
+    number: "2. ",
     
     title: "Номер и дата контракта",
 
@@ -42,7 +42,7 @@ const fields = [
 {
     id: "buyer",
 
-    number: "3.",
+    number: "3. ",
    
     title: "Данные покупателя",
 
@@ -61,7 +61,7 @@ const fields = [
 {
     id: "contract",
     
-    number: "4.",
+    number: "4. ",
 
     title: "Номер и дата инвойса",
 
@@ -81,7 +81,7 @@ const fields = [
 {
     id: "terms",
 
-    number: "5.",
+    number: "5. ",
     
     title: "Условия поставки и оплаты",
 
@@ -101,7 +101,7 @@ const fields = [
 {
     id: "goods",
 
-    number: "6.",
+    number: "6. ",
     
     title: "Перечень и описание товаров",
 
@@ -121,7 +121,7 @@ const fields = [
 {
     id: "amount",
 
-    number: "7.",
+    number: "7. ",
     
     title: "Количество, стоимость и валюта",
 
@@ -141,7 +141,7 @@ const fields = [
 {
     id: "signature",
 
-    number: "8.",
+    number: "8. ",
     
     title: "Подпись и печать продавца",
 
