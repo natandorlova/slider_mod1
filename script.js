@@ -1,192 +1,149 @@
 const viewer = document.getElementById("viewer");
-const reveal = document.getElementById("reveal");
-const handle = document.getElementById("handle");
+const overlay = document.getElementById("overlay");
 const divider = document.getElementById("divider");
-const markersLayer = document.getElementById("markers");
-
-const card = document.getElementById("infoCard");
-const closeCard = document.getElementById("closeCard");
-
+const handle = document.getElementById("handle");
+const markers = document.getElementById("markers");
+const panel = document.getElementById("content");
 
 let dragging = false;
-let currentPosition = 0;
+let percent = 0;
 
+// ---------------------
+// установка положения
+// ---------------------
 
+function setSlider(p){
 
-// --------------------------
-// движение слайдера
-// --------------------------
+    percent = Math.max(0,Math.min(100,p));
 
-function moveSlider(clientX) {
+    overlay.style.clipPath =
+        `inset(0 ${100-percent}% 0 0)`;
 
-    const rect = viewer.getBoundingClientRect();
+    divider.style.left = percent+"%";
 
-    let x = clientX - rect.left;
-
-
-    if (x < 0) x = 0;
-
-    if (x > rect.width) x = rect.width;
-
-
-    currentPosition = (x / rect.width) * 100;
-
-
-    // открываем заполненный документ
-
-    reveal.style.clipPath =
-        `inset(0 ${100 - currentPosition}% 0 0)`;
-
-
-    // линия
-
-    divider.style.left =
-        currentPosition + "%";
-
-
-    // ручка
-
-    handle.style.left =
-        currentPosition + "%";
-
+    handle.style.left = percent+"%";
 
     updateMarkers();
 
 }
 
 
+// ---------------------
+// перевод координаты
+// ---------------------
 
-// --------------------------
-// старт движения
-// --------------------------
+function clientToPercent(clientX){
 
-handle.addEventListener(
-"mousedown",
-function(e){
+    const r = viewer.getBoundingClientRect();
 
-    dragging = true;
+    return ((clientX-r.left)/r.width)*100;
+
+}
+
+
+
+// ---------------------
+// мышь
+// ---------------------
+
+handle.addEventListener("mousedown",(e)=>{
+
+    dragging=true;
 
     e.preventDefault();
 
 });
 
+window.addEventListener("mouseup",()=>{
 
-handle.addEventListener(
-"touchstart",
-function(e){
-
-    dragging = true;
-
-    e.preventDefault();
-
-},
-{passive:false}
-);
-
-
-
-
-// --------------------------
-// движение мышью
-// --------------------------
-
-window.addEventListener(
-"mousemove",
-function(e){
-
-    if(!dragging) return;
-
-    moveSlider(e.clientX);
+    dragging=false;
 
 });
 
-
-
-
-// --------------------------
-// движение пальцем
-// --------------------------
-
-window.addEventListener(
-"touchmove",
-function(e){
+window.addEventListener("mousemove",(e)=>{
 
     if(!dragging) return;
 
-    moveSlider(
-        e.touches[0].clientX
+    setSlider(
+        clientToPercent(e.clientX)
     );
 
-},
-{passive:false}
-);
+});
 
 
 
+// ---------------------
+// touch
+// ---------------------
 
-// --------------------------
-// отпускание
-// --------------------------
+handle.addEventListener("touchstart",(e)=>{
 
-window.addEventListener(
-"mouseup",
-function(){
+    dragging=true;
+
+    e.preventDefault();
+
+},{passive:false});
+
+window.addEventListener("touchend",()=>{
 
     dragging=false;
 
 });
 
+window.addEventListener("touchmove",(e)=>{
 
-window.addEventListener(
-"touchend",
-function(){
+    if(!dragging) return;
 
-    dragging=false;
+    setSlider(
 
-});
+        clientToPercent(
+
+            e.touches[0].clientX
+
+        )
+
+    );
+
+},{passive:false});
 
 
 
-
-
-// --------------------------
+// ---------------------
 // подсветки
-// --------------------------
+// ---------------------
 
 function updateMarkers(){
 
+    markers.innerHTML="";
+
     fields.forEach(field=>{
 
+        if(percent>=field.showAt){
 
-        let marker =
-        document.getElementById(
-            "marker-" + field.id
-        );
+            const m=document.createElement("div");
 
+            m.className="marker";
 
-        if(currentPosition >= field.showAt){
+            m.style.left=field.x+"%";
 
+            m.style.top=field.y+"%";
 
-            if(!marker){
+            m.style.width=field.w+"%";
 
-                createMarker(field);
+            m.style.height=field.h+"%";
 
-            }
+            m.onclick=(e)=>{
 
+                e.stopPropagation();
 
-        }
-        else{
+                panel.innerHTML=
+                    "<h3>"+field.title+"</h3><p>"+field.description+"</p>";
 
+            };
 
-            if(marker){
-
-                marker.remove();
-
-            }
-
+            markers.appendChild(m);
 
         }
-
 
     });
 
@@ -194,118 +151,12 @@ function updateMarkers(){
 
 
 
-
-function createMarker(field){
-
-
-    const marker =
-    document.createElement("div");
-
-
-    marker.className="marker";
-
-
-    marker.id =
-    "marker-" + field.id;
-
-
-
-    marker.style.left =
-    field.x + "%";
-
-
-    marker.style.top =
-    field.y + "%";
-
-
-    marker.style.width =
-    field.w + "%";
-
-
-    marker.style.height =
-    field.h + "%";
-
-
-
-    marker.addEventListener(
-    "click",
-    function(e){
-
-        // чтобы клик не двигал слайдер
-
-        e.stopPropagation();
-
-
-        showCard(field);
-
-    });
-
-
-
-    markersLayer.appendChild(marker);
-
-}
-
-
-
-
-
-// --------------------------
-// карточка
-// --------------------------
-
-function showCard(field){
-
-
-    card.style.display="block";
-
-
-    card.querySelector("h2").textContent =
-    field.title;
-
-
-    card.querySelector("p").textContent =
-    field.description;
-
-
-}
-
-
-
-closeCard.addEventListener(
-"click",
-function(){
-
-    card.style.display="none";
-
-});
-
-
-
-
-// --------------------------
+// ---------------------
 // старт
-// --------------------------
+// ---------------------
 
-window.addEventListener(
-"load",
-function(){
+window.onload=()=>{
 
+    setSlider(0);
 
-    currentPosition = 0;
-
-
-    reveal.style.clipPath =
-        "inset(0 100% 0 0)";
-
-
-    divider.style.left = "0%";
-
-
-    handle.style.left = "0%";
-
-
-    updateMarkers();
-
-
-});
+};
