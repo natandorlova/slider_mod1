@@ -94,17 +94,21 @@ function setProgress(value){
 
 function getProgress(y){
 
+    const track =
+    document.getElementById("sliderTrack");
+
 
     const rect =
-    documentBox.getBoundingClientRect();
+    track.getBoundingClientRect();
 
 
-    return (
-        (y - rect.top)
-        /
-        rect.height
-        *
-        100
+    let value =
+    ((y - rect.top) / rect.height) * 100;
+
+
+    return Math.max(
+        0,
+        Math.min(100,value)
     );
 
 }
