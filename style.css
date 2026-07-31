@@ -1,60 +1,47 @@
-/* ---------- Общая страница ---------- */
-
 *{
+    margin:0;
+    padding:0;
     box-sizing:border-box;
 }
 
 body{
 
-    margin:0;
-
-    font-family:Arial,sans-serif;
-
-    background:#eef2f6;
-
-    color:#2d3748;
-
+    font-family:Arial,Helvetica,sans-serif;
+    background:#eef2f7;
+    color:#2f3542;
 }
 
 .page{
 
-    width:min(1500px,95vw);
-
+    width:min(1600px,95vw);
     margin:30px auto;
-
 }
 
 h1{
 
     text-align:center;
-
-    margin-bottom:10px;
-
+    margin-bottom:8px;
 }
 
 .subtitle{
 
     text-align:center;
-
+    margin-bottom:25px;
     color:#666;
-
-    margin-bottom:30px;
-
 }
 
-/* ---------- Макет ---------- */
 
-.workspace{
+/* ======================= */
+
+.layout{
 
     display:flex;
-
-    gap:25px;
-
+    gap:24px;
     align-items:flex-start;
-
 }
 
-/* ---------- Документ ---------- */
+
+/* ======================= */
 
 .viewer{
 
@@ -68,15 +55,14 @@ h1{
 
     overflow:hidden;
 
-    box-shadow:0 15px 40px rgba(0,0,0,.18);
-
-    user-select:none;
+    box-shadow:0 12px 35px rgba(0,0,0,.18);
 
 }
 
+
 /* картинки */
 
-.doc{
+.image{
 
     display:block;
 
@@ -84,13 +70,16 @@ h1{
 
     height:auto;
 
+    user-select:none;
+
     pointer-events:none;
 
 }
 
-/* ---------- Заполненный слой ---------- */
 
-.reveal{
+/* верхний слой */
+
+.overlay{
 
     position:absolute;
 
@@ -98,21 +87,12 @@ h1{
 
     overflow:hidden;
 
-    clip-path:inset(0 50% 0 0);
-
-    pointer-events:none;
+    clip-path:inset(0 100% 0 0);
 
 }
 
-.reveal img{
 
-    width:100%;
-
-    display:block;
-
-}
-
-/* ---------- Вертикальная линия ---------- */
+/* линия */
 
 #divider{
 
@@ -128,15 +108,16 @@ h1{
 
     box-shadow:
 
-        0 0 12px rgba(0,0,0,.4);
+        0 0 10px rgba(0,0,0,.45);
 
-    left:50%;
+    left:0;
 
-    z-index:20;
+    z-index:40;
 
 }
 
-/* ---------- Ползунок ---------- */
+
+/* ручка */
 
 #handle{
 
@@ -146,33 +127,32 @@ h1{
 
     bottom:0;
 
-    width:40px;
+    width:46px;
 
-    margin-left:-20px;
+    margin-left:-23px;
 
-    left:50%;
-
-    z-index:30;
+    left:0;
 
     cursor:ew-resize;
 
-    touch-action:none;
+    z-index:50;
 
 }
 
-.handle-circle{
+
+.knob{
 
     position:absolute;
 
-    top:50%;
-
     left:50%;
+
+    top:50%;
 
     transform:translate(-50%,-50%);
 
-    width:54px;
+    width:56px;
 
-    height:54px;
+    height:56px;
 
     border-radius:50%;
 
@@ -186,7 +166,7 @@ h1{
 
     justify-content:center;
 
-    font-size:26px;
+    font-size:24px;
 
     font-weight:bold;
 
@@ -194,7 +174,8 @@ h1{
 
 }
 
-/* ---------- Подсветки ---------- */
+
+/* ======================= */
 
 #markers{
 
@@ -202,140 +183,89 @@ h1{
 
     inset:0;
 
-    z-index:25;
+    z-index:30;
 
     pointer-events:none;
 
 }
 
 
-/* ---------- Подсветка ---------- */
+
+/* зеленые зоны */
 
 .marker{
 
     position:absolute;
 
-    cursor:pointer;
-
     pointer-events:auto;
+
+    cursor:pointer;
 
     border-radius:8px;
 
-    overflow:hidden;
-
-    background:transparent;
-
-}
-
-/* сам "маркер" */
-
-.marker::before{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
     background:
+
         linear-gradient(
-            90deg,
-            rgba(128,255,80,.45),
-            rgba(110,255,70,.35),
-            rgba(128,255,80,.45)
+
+            rgba(114,255,114,.45),
+
+            rgba(90,230,90,.35)
+
         );
 
-    border-radius:10px;
+    border:1px solid rgba(40,150,40,.25);
 
-    transform-origin:left center;
+    animation:fade .25s ease;
 
-    animation:highlight .35s ease-out forwards;
-
-    filter:blur(.3px);
+    transition:.15s;
 
 }
 
-/* лёгкое свечение */
-
-.marker::after{
-
-    content:"";
-
-    position:absolute;
-
-    inset:-2px;
-
-    border-radius:10px;
-
-    border:1px solid rgba(80,180,40,.35);
-
-    opacity:.5;
-
-}
-
-.marker:hover::before{
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(128,255,80,.60),
-            rgba(110,255,70,.50),
-            rgba(128,255,80,.60)
-        );
-
-}
-
-@keyframes highlight{
-
-    from{
-
-        transform:scaleX(0);
-
-        opacity:0;
-
-    }
-
-    to{
-
-        transform:scaleX(1);
-
-        opacity:1;
-
-    }
-
-}
 
 .marker:hover{
 
-    opacity:.55;
+    background:
+
+        linear-gradient(
+
+            rgba(114,255,114,.60),
+
+            rgba(90,230,90,.55)
+
+        );
 
 }
 
-@keyframes marker{
+
+@keyframes fade{
 
     from{
 
-        transform:scaleX(0);
-
         opacity:0;
+
+        transform:scaleX(.2);
 
     }
 
     to{
 
-        transform:scaleX(1);
+        opacity:1;
 
-        opacity:.35;
+        transform:scaleX(1);
 
     }
 
 }
 
-/* ---------- Карточка ---------- */
 
-#infoCard{
 
-    width:320px;
+/* ======================= */
+
+#panel{
+
+    width:340px;
+
+    min-height:280px;
 
     background:white;
 
@@ -343,7 +273,7 @@ h1{
 
     padding:24px;
 
-    box-shadow:0 15px 35px rgba(0,0,0,.15);
+    box-shadow:0 12px 30px rgba(0,0,0,.12);
 
     position:sticky;
 
@@ -351,47 +281,34 @@ h1{
 
 }
 
-#infoCard h2{
 
-    margin-top:0;
+#panel h2{
 
     color:#2563eb;
 
-}
-
-#closeCard{
-
-    float:right;
-
-    border:none;
-
-    background:none;
-
-    cursor:pointer;
-
-    font-size:20px;
-
-    color:#888;
+    margin-bottom:18px;
 
 }
 
-#closeCard:hover{
 
-    color:black;
+#content{
+
+    line-height:1.55;
 
 }
 
-/* ---------- Телефон ---------- */
 
-@media (max-width:1000px){
+/* ======================= */
 
-.workspace{
+@media(max-width:1000px){
+
+.layout{
 
     flex-direction:column;
 
 }
 
-#infoCard{
+#panel{
 
     width:100%;
 
