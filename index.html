@@ -3,13 +3,12 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commercial Invoice</title>
 
-    <title>Commercial Invoice</title>
-
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -20,46 +19,48 @@
     <h1>Commercial Invoice</h1>
 
     <p class="subtitle">
-        Передвигайте ползунок, чтобы увидеть правильное оформление документа
+        Передвигайте ползунок и изучайте обязательные элементы инвойса
     </p>
 
-    <div class="workspace">
-
-        <!-- ДОКУМЕНТ -->
+    <div class="layout">
 
         <div class="viewer" id="viewer">
 
-            <!-- Пустой документ -->
+            <!-- нижний слой -->
 
             <img
-                    src="images/blank.png"
-                    class="doc blank"
-                    draggable="false">
+                class="image"
+                src="images/blank.png"
+                alt="Blank invoice"
+                draggable="false">
 
-            <!-- Заполненный документ -->
+            <!-- верхний слой -->
 
-            <div class="reveal" id="reveal">
+            <div
+                class="overlay"
+                id="overlay">
 
                 <img
-                        src="images/completed.png"
-                        class="doc completed"
-                        draggable="false">
+                    class="image"
+                    src="images/completed.png"
+                    alt="Completed invoice"
+                    draggable="false">
 
             </div>
 
-            <!-- Зеленые подсветки -->
+            <!-- подсветки -->
 
             <div id="markers"></div>
 
-            <!-- Вертикальная линия -->
+            <!-- линия -->
 
             <div id="divider"></div>
 
-            <!-- Ползунок -->
+            <!-- ручка -->
 
             <div id="handle">
 
-                <div class="handle-circle">
+                <div class="knob">
 
                     ⇆
 
@@ -69,23 +70,21 @@
 
         </div>
 
-        <!-- Правая карточка -->
+        <!-- карточка -->
 
-        <aside id="infoCard">
-
-            <button id="closeCard">✕</button>
+        <aside id="panel">
 
             <h2>
 
-                Выберите поле
+                Обязательные реквизиты
 
             </h2>
 
-            <p>
+            <div id="content">
 
                 Передвигайте ползунок или нажмите на подсвеченную область.
 
-            </p>
+            </div>
 
         </aside>
 
@@ -94,9 +93,7 @@
 </div>
 
 <script src="data.js"></script>
-
 <script src="script.js"></script>
 
 </body>
-
 </html>
