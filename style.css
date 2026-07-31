@@ -209,28 +209,99 @@ h1{
 }
 
 
-.marker{
+/* ---------- Подсветка ---------- */
 
-    pointer-events:auto;
-
-}
 .marker{
 
     position:absolute;
 
-    border-radius:8px;
-
-    background:#7dff67;
-
-    opacity:.35;
-
     cursor:pointer;
-
-    transition:opacity .2s;
 
     pointer-events:auto;
 
-    animation:marker .3s ease;
+    border-radius:8px;
+
+    overflow:hidden;
+
+    background:transparent;
+
+}
+
+/* сам "маркер" */
+
+.marker::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(128,255,80,.45),
+            rgba(110,255,70,.35),
+            rgba(128,255,80,.45)
+        );
+
+    border-radius:10px;
+
+    transform-origin:left center;
+
+    animation:highlight .35s ease-out forwards;
+
+    filter:blur(.3px);
+
+}
+
+/* лёгкое свечение */
+
+.marker::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-2px;
+
+    border-radius:10px;
+
+    border:1px solid rgba(80,180,40,.35);
+
+    opacity:.5;
+
+}
+
+.marker:hover::before{
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(128,255,80,.60),
+            rgba(110,255,70,.50),
+            rgba(128,255,80,.60)
+        );
+
+}
+
+@keyframes highlight{
+
+    from{
+
+        transform:scaleX(0);
+
+        opacity:0;
+
+    }
+
+    to{
+
+        transform:scaleX(1);
+
+        opacity:1;
+
+    }
 
 }
 
