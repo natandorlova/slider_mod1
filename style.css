@@ -181,8 +181,9 @@ h1{
     transition:.35s ease;
     
     display:flex;
-align-items:center;
-justify-content:center;
+align-items:flex-start;
+justify-content:flex-end;
+padding:4px;
 
 font-size:20px;
 font-weight:bold;
