@@ -269,6 +269,8 @@ to{
 
     height:60px;
 
+    margin-left:5px;
+
     cursor:pointer;
 
     z-index:50;
@@ -352,7 +354,7 @@ to{
 
 .info-card h3{
 
-    color:#2563eb;
+    color:#309d7f;
 
     margin-bottom:8px;
 
@@ -376,7 +378,7 @@ to{
 
     border-radius:6px;
 
-    background:#2563eb;
+    background:#309d7f;
 
     color:white;
 
@@ -400,7 +402,7 @@ to{
 
 .info-panel h3{
 
-    color:#2563eb;
+    color:#309d7f;
 
     margin-bottom:12px;
 
@@ -426,7 +428,7 @@ to{
 
     border-radius:8px;
 
-    background:#2563eb;
+    background:#309d7f;
 
     color:white;
 
