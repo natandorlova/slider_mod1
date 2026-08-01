@@ -28,7 +28,7 @@ function createMarkers(){
 
         marker.className = "marker";
 
-        marker.innerHTML = field.number;
+        marker.innerHTML = field.number + ". ";
 
         marker.id = "marker-" + field.id;
 
