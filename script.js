@@ -305,7 +305,7 @@ function showCard(field){
 
     card.innerHTML = `
 
-        <h3>${field.number}${field.title}</h3>
+        <h3>${field.number}. ${field.title}</h3>
 
         <p>${field.description}</p>
 
