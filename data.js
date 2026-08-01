@@ -9,7 +9,7 @@ const fields = [
     showAt:15,
 
     x:4,
-    y:9,
+    y:11,
     w:56,
     h:13
 },
@@ -23,7 +23,7 @@ const fields = [
     showAt:15,
 
     x:73,
-    y:9,
+    y:11,
     w:23,
     h:13
 },
