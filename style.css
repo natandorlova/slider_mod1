@@ -155,10 +155,10 @@ h2 {
     margin-left: 5px;
     height: 90%;
     min-height: 500px;
+    padding-bottom: 30px;
     background: #d9e2ec;
     border-radius: 20px;
 }
-
 .slider-handle {
     position: absolute;
     left: 70%;
