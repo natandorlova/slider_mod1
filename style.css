@@ -27,16 +27,22 @@ body{
 
 
 
-h1{
+/* =========================
+   ЗАГОЛОВКИ
+========================= */
+
+
+h2{
 
     text-align:center;
 
-    width:850px;
+    color:#309d7f;
+
+    font-size:32px;
 
     margin-bottom:10px;
 
 }
-
 
 
 .subtitle{
@@ -45,9 +51,12 @@ h1{
 
     color:#666;
 
-    margin-bottom:30px;
+    font-size:18px;
+
+    margin-bottom:8px;
 
 }
+
 
 
 
