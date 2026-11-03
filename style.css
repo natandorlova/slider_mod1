@@ -40,7 +40,7 @@ h2{
 
     font-size:32px;
 
-    margin-bottom:10px;
+    margin-bottom:20px;
 
 }
 
@@ -249,7 +249,7 @@ to{
 
     position:relative;
 
-    transform: translateY(-20px);
+    transform: translateY(-50px);
 
     width:30px;
     
@@ -351,11 +351,13 @@ to{
 
 .info-card{
 
+    margin-top:10px;
+    
     background:#fff;
 
     border-radius:10px;
 
-    padding:15px;
+    padding:10px;
 
     margin-bottom:15px;
 
@@ -365,8 +367,6 @@ to{
 
 
 .info-card h3{
-
-    color:#309d7f;
 
     margin-bottom:8px;
 
@@ -402,6 +402,8 @@ to{
 
 .info-panel h2{
 
+    color:#309d7f;
+    
     text-align:center;
 
     margin-bottom:15px;
