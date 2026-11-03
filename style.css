@@ -108,8 +108,8 @@ h2 {
     position: absolute;
 
     /* Зелёная полупрозрачная подсветка */
-    background: rgba(48, 157, 127, 0.25);
-    border: 2px solid rgba(48, 157, 127, 0.65);
+    background: rgba(120, 255, 90, 0.45);
+    border: 2px solid rgba(60, 180, 60, 0.35);
 
     border-radius: 8px;
     opacity: 0;
