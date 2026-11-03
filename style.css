@@ -249,6 +249,8 @@ to{
 
     position:relative;
 
+    transform: translateY(-20px);
+
     width:30px;
     
     margin-left:5px;
