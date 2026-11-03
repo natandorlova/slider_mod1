@@ -196,6 +196,7 @@ h2 {
     min-height: 150px;
     background: white;
     border-radius: 14px;
+    margin-top: 8px;
     padding: 20px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
