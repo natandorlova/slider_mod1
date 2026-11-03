@@ -2,136 +2,114 @@
 <html lang="ru">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+    <title>Invoice Trainer</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Invoice Trainer</title>
-
-<link rel="stylesheet" href="style.css">
-
+    <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
 
-
 <div class="page">
 
+    <div class="layout">
 
-<h2>Обязательные реквизиты инвойса</h2>
+        <!-- ЛЕВАЯ КОЛОНКА: ЗАГОЛОВОК И ДОКУМЕНТ -->
 
-<div class="layout">
+        <div class="document-column">
 
+            <h2>Обязательные реквизиты инвойса</h2>
 
+            <!-- ДОКУМЕНТ И ПОЛЗУНОК -->
 
-    <!-- ДОКУМЕНТ -->
+            <div class="document-wrapper">
 
-    <div class="document-wrapper">
+                <div class="document" id="document">
 
+                    <!-- ПУСТОЙ БЛАНК -->
 
-        <div class="document" id="document">
+                    <img
+                        src="images/blank.png"
+                        class="invoice-image"
+                        alt="Пустой инвойс"
+                    >
 
+                    <!-- ЗАПОЛНЕННЫЙ ДОКУМЕНТ -->
 
-            <!-- пустой бланк -->
+                    <div
+                        class="completed-layer"
+                        id="completedLayer"
+                    >
 
-            <img
-            src="images/blank.png"
-            class="invoice-image"
-            alt="Пустой инвойс">
+                        <img
+                            src="images/completed.png"
+                            class="invoice-image"
+                            alt="Заполненный инвойс"
+                        >
 
+                    </div>
 
+                    <!-- ЗОНЫ ПОДСВЕТКИ -->
 
-            <!-- заполненный документ -->
+                    <div id="markers"></div>
 
-            <div
-            class="completed-layer"
-            id="completedLayer">
-
-
-                <img
-                src="images/completed.png"
-                class="invoice-image"
-                alt="Заполненный инвойс">
-
-
-            </div>
-
-
-
-            <!-- зоны подсветки -->
-
-            <div id="markers"></div>
-
-
-
-        </div>
-
-
-
-        <!-- вертикальный слайдер -->
-
-        <div class="slider-track" id="sliderTrack">
-
-
-            <div class="slider-handle" id="sliderHandle">
-
-
-                <div class="handle-circle">
-                    ▼
                 </div>
 
+                <!-- ВЕРТИКАЛЬНЫЙ СЛАЙДЕР -->
+
+                <div
+                    class="slider-track"
+                    id="sliderTrack"
+                >
+
+                    <div
+                        class="slider-handle"
+                        id="sliderHandle"
+                    >
+
+                        <div class="handle-circle">
+                            ▼
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 
-
         </div>
 
+        <!-- ПРАВАЯ КОЛОНКА: КАРТОЧКА -->
 
+        <aside
+            class="info-panel"
+            id="infoPanel"
+        >
+
+            <div id="infoContent">
+
+                <strong>Подсказка</strong>
+
+                <p>
+                    Передвигайте ползунок, пояснения появятся автоматически.
+                </p>
+
+                <p>
+                    Нажимайте кнопку «Закрыть», чтобы увидеть следующие пояснения.
+                </p>
+
+            </div>
+
+        </aside>
 
     </div>
 
-
-
-
-
-    <!-- КАРТОЧКА -->
-
-    <aside class="info-panel" id="infoPanel">
-
-
-        <div id="infoContent">
-
-
-          <strong>Подсказка</strong>
-
-                <p>Передвигайте ползунок, пояснения появятся автоматически.</p>
-
-                <p>Нажимайте кнопку "закрыть", чтобы увидеть следующие пояснения.</p>
-
-
-        </div>
-
-
-
-    </aside>
-
-
-
 </div>
-
-
-
-</div>
-
-
 
 <script src="data.js"></script>
-
 <script src="script.js"></script>
 
-
 </body>
-
 </html>
