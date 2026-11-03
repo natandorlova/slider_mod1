@@ -1,307 +1,232 @@
+
 const documentBox = document.getElementById("document");
 const completedLayer = document.getElementById("completedLayer");
+const sliderTrack = document.getElementById("sliderTrack");
 const sliderHandle = document.getElementById("sliderHandle");
 const markersBox = document.getElementById("markers");
 const infoPanel = document.getElementById("infoPanel");
 const infoContent = document.getElementById("infoContent");
 
-
 let dragging = false;
-
 let progress = 0;
 
-
-// какие карточки пользователь закрыл вручную
+// Какие карточки пользователь закрыл вручную
 let closedCards = [];
+
+
+// ----------------------------
+// расчёт доступного перемещения
+// ----------------------------
+
+function getMaxTravel() {
+    return Math.max(
+        0,
+        sliderTrack.clientHeight - sliderHandle.offsetHeight
+    );
+}
 
 
 // ----------------------------
 // создаём зоны подсветки
 // ----------------------------
 
-function createMarkers(){
+function createMarkers() {
 
-    fields.forEach(field=>{
-
+    fields.forEach(field => {
 
         const marker = document.createElement("div");
 
         marker.className = "marker";
-
         marker.innerHTML = field.number + ". ";
-
         marker.id = "marker-" + field.id;
-
 
         marker.style.left = field.x + "%";
         marker.style.top = field.y + "%";
-
         marker.style.width = field.w + "%";
         marker.style.height = field.h + "%";
 
-
-
-        marker.onclick = function(e){
-
+        marker.onclick = function(e) {
             e.stopPropagation();
-
             showCard(field);
-
         };
 
-
         markersBox.appendChild(marker);
-
 
     });
 
 }
-
 
 
 // ----------------------------
 // движение слайдера
 // ----------------------------
 
-function setProgress(value){
-
+function setProgress(value) {
 
     progress = Math.max(
         0,
-        Math.min(100,value)
+        Math.min(100, value)
     );
 
-
-
-    // открываем заполненный слой сверху вниз
+    // Открываем заполненный слой сверху вниз
 
     completedLayer.style.clipPath =
-    `inset(0 0 ${100-progress}% 0)`;
+        `inset(0 0 ${100 - progress}% 0)`;
 
+    // Перемещаем ручку в пределах трека
 
-
-    // двигаем ручку
+    const maxTravel = getMaxTravel();
 
     sliderHandle.style.top =
-    progress + "%";
-
-
+        (maxTravel * progress / 100) + "px";
 
     updateFields();
 
 }
 
 
+// ----------------------------
+// определяем прогресс по координате
+// ----------------------------
 
+function getProgress(y) {
 
-function getProgress(y){
+    const rect = sliderTrack.getBoundingClientRect();
 
-    const track =
-    document.getElementById("sliderTrack");
+    const maxTravel = getMaxTravel();
 
+    if (maxTravel <= 0) return 0;
 
-    const rect =
-    track.getBoundingClientRect();
+    // Учитываем половину высоты ручки,
+    // чтобы её центр следовал за указателем
 
+    const handleTop =
+        y - rect.top - sliderHandle.offsetHeight / 2;
 
-    let value =
-    ((y - rect.top) / rect.height) * 100;
-
+    const value =
+        (handleTop / maxTravel) * 100;
 
     return Math.max(
         0,
-        Math.min(100,value)
+        Math.min(100, value)
     );
 
 }
-
 
 
 // ----------------------------
 // мышь
 // ----------------------------
 
-sliderHandle.addEventListener(
-"mousedown",
-function(e){
+sliderHandle.addEventListener("mousedown", function(e) {
 
-    dragging=true;
-
+    dragging = true;
     e.preventDefault();
 
 });
 
+window.addEventListener("mousemove", function(e) {
 
-window.addEventListener(
-"mousemove",
-function(e){
+    if (!dragging) return;
 
-    if(!dragging) return;
-
-
-    setProgress(
-        getProgress(e.clientY)
-    );
+    setProgress(getProgress(e.clientY));
 
 });
 
+window.addEventListener("mouseup", function() {
 
-window.addEventListener(
-"mouseup",
-function(){
-
-    dragging=false;
+    dragging = false;
 
 });
-
-
 
 
 // ----------------------------
 // телефон
 // ----------------------------
 
-sliderHandle.addEventListener(
-"touchstart",
-function(e){
+sliderHandle.addEventListener("touchstart", function(e) {
 
-    dragging=true;
-
+    dragging = true;
     e.preventDefault();
 
-},
-{passive:false}
-
-);
+}, { passive: false });
 
 
+window.addEventListener("touchmove", function(e) {
 
-window.addEventListener(
-"touchmove",
-function(e){
-
-    if(!dragging) return;
-
+    if (!dragging) return;
 
     setProgress(
-        getProgress(
-            e.touches[0].clientY
-        )
+        getProgress(e.touches[0].clientY)
     );
 
-
-},
-{passive:false}
-
-);
+}, { passive: false });
 
 
+window.addEventListener("touchend", function() {
 
-window.addEventListener(
-"touchend",
-function(){
-
-    dragging=false;
+    dragging = false;
 
 });
-
-
 
 
 // ----------------------------
 // проверяем поля
 // ----------------------------
 
-function updateFields(){
+function updateFields() {
 
+    fields.forEach(field => {
 
-    fields.forEach(field=>{
-
-
-        const marker =
-        document.getElementById(
+        const marker = document.getElementById(
             "marker-" + field.id
         );
 
-
-
-        if(progress >= field.showAt){
-
+        if (progress >= field.showAt) {
 
             marker.classList.add("active");
 
+            // Автоматическое окно,
+            // если пользователь его ещё не закрывал
 
-
-            // автоматическое окно,
-            // если пользователь его еще не закрывал
-
-            if(!closedCards.includes(field.id)){
-
-
+            if (!closedCards.includes(field.id)) {
                 showCard(field);
-
-
             }
 
-
-        }
-
-        else{
-
+        } else {
 
             marker.classList.remove("active");
 
-
             removeCard(field.id);
 
-
-            // если вернулись назад,
+            // Если вернулись назад,
             // разрешаем появиться снова
 
-            closedCards =
-            closedCards.filter(
-                id=>id!==field.id
+            closedCards = closedCards.filter(
+                id => id !== field.id
             );
-
 
         }
 
-
     });
 
-
 }
-
-
-
 
 
 // ----------------------------
 // карточки
 // ----------------------------
 
-function showCard(field){
+function showCard(field) {
 
-
-    if(
-        document.getElementById(
-            "card-" + field.id
-        )
-    ){
+    if (document.getElementById("card-" + field.id)) {
         return;
     }
 
+    const card = document.createElement("div");
 
-
-    const card =
-    document.createElement("div");
-
-
-    card.className="info-card";
-
-    card.id="card-" + field.id;
-
-
+    card.className = "info-card";
+    card.id = "card-" + field.id;
 
     card.innerHTML = `
 
@@ -315,52 +240,34 @@ function showCard(field){
 
     `;
 
-
-
-    card.querySelector("button")
-    .onclick=function(){
+    card.querySelector("button").onclick = function() {
 
         closedCards.push(field.id);
-
         removeCard(field.id);
 
     };
 
-
-
     infoContent.appendChild(card);
-
 
 }
 
 
+function removeCard(id) {
 
+    const card = document.getElementById("card-" + id);
 
-
-function removeCard(id){
-
-
-    const card =
-    document.getElementById(
-        "card-" + id
-    );
-
-
-    if(card){
-
+    if (card) {
         card.remove();
-
     }
 
 }
-
 
 
 // ----------------------------
 // запуск
 // ----------------------------
 
-window.onload=function(){
+window.onload = function() {
 
     createMarkers();
 
