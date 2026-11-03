@@ -200,7 +200,14 @@ h2 {
     padding: 20px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
+.info-panel p {
+    line-height: 1.55;
+    margin-bottom: 16px;
+}
 
+.info-panel p:last-child {
+    margin-bottom: 0;
+}
 .info-card {
     margin-top: 10px;
     background: #fff;
